@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "api": {
+      "databoxQL": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "storage": {
+      "APIDataCovid": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "APIDataCovid:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "User:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

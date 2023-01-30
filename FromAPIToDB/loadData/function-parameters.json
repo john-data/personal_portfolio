@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "auth": {
+      "dataescargo29577cf0": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "databoxQL": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "storage": {
+      "APIDataCovid": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "databoxS3": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "APIDataCovid:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "User:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
