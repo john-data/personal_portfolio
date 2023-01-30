@@ -1,0 +1,97 @@
+<!-- metadata -->
+<!DOCTYPE html
+<html lang="en">
+<!-- end metadata -->
+
+
+
+<!-- head (not visible) -->
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<!-- end head (not visible) -->
+
+
+
+<!-- begin header and website container -->
+<body id="page-top" class="container">
+    <%- include('../partials/nav'); %>
+
+<header class="bg-primary bg-gradient text-white">
+    <%- include('../partials/header'); %>
+</header>
+<!-- end header (container encapsulates the entire website) -->
+
+
+
+<!-- main section -->
+<main>
+    <section id="contact">
+        <div class="container px-4">
+            <div class="row gx-4 justify-content-center">
+                <div class="col-lg-8">
+                    <h2>Authorize us to pull and analyze your Twitch data</h2>
+                    <p class="lead">We'd love to improve your analytics, business intelligence and insight! Your stream
+                        has more potential than you think. With the resources and experience with ML/AI, data engineering 
+                        and business intelligence, we can give you the keys to success. With the right data, we can produce
+                         advanced analytics providing you valuable insight like: the best times to stream to maximize 
+                         subscriptions, donations and viewers and a lot more. 
+                    </p><br>
+                    <p class="lead">Authorize us to obtain important information about your channel like:<br>
+                        - channel.follow<br>
+                        - channel.update<br>
+                        - channel.subscribe<br>
+                        - channel.subscription.end<br>
+                        - channel.subscription.gift<br>
+                        - channel.subscription.message<br>
+                        - channel.cheer<br>
+                        - channel.raid<br>
+                        - channel.hype_train.begin<br>
+                        - channel.hype_train.progress<br>
+                        - channel.hype_train.end<br>
+                        - stream.online<br>
+                        - stream.offline<br>
+                        - channel.goal.begin<br>
+                        - channel.goal.progress<br>
+                        - channel.goal.end<br>
+                    </p><br>
+                    <p class="lead">Just a heads up: We have NO ACCESS to your account, personal information or channel. We CANNOT make
+                        changes to your channel as the Authorization we require is READ ONLY. Provide us OAUTH access to your
+                        channel data with no hassle. Just click the button below to authorize our web app to gather data while
+                        you stream. 
+                    </p>
+                        <center><br><br><form action="/auth/twitch" method="GET">
+                        <a class="btn btn-lg btn-light" href="/auth/twitch">Authorize on Twitch.com</a></center>
+                </div>
+            </div>
+        </div>
+    </section>
+          
+</main>
+<!-- end main section -->
+
+
+
+<!-- footer -->
+<footer>
+    <%- include('../partials/footer'); %>
+</footer>
+<!-- end footer -->
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

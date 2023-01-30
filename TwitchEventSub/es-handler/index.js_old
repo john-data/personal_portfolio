@@ -1,0 +1,105 @@
+//importing modules for the program
+const passport = require("passport");
+const twitchStrategy = require("passport-twitch").Strategy;
+const bodyParser = require("body-parser");
+const crypto = require("crypto");
+const twitchSigningSecret = process.env.TWITCH_SIGNING_SECRET;
+const express = require("express");
+
+//define express application and set port to 3000
+const app = express();
+const port = process.env.PORT || 3000;
+
+//middleware (for views and body parser)
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true }));
+
+//define what renders when someone goes to dataescargot.com
+//check ~/views to edit html
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+//define what happens when someone clicks login on home page
+app.get("/login", function (req, res) {
+    res.render("login");
+});
+
+//start the application listener using port 3000
+const listener = app.listen(port, () => {
+  console.log("The EventSub Application has started listening on port: " + listener.address().port);
+});
+
+//verify event received is from twitch and not anyone else
+const verifyTwitchSignature = (req, res, buf, encoding) => {
+  const messageId = req.header("Twitch-Eventsub-Message-Id");
+  const timestamp = req.header("Twitch-Eventsub-Message-Timestamp");
+  const messageSignature = req.header("Twitch-Eventsub-Message-Signature");
+  const time = Math.floor(new Date().getTime() / 1000);
+  console.log(`Message ${messageId} Signature: `, messageSignature);
+
+  //if it takes over 10 minutes then print "failure" and throw error
+  if (Math.abs(time - timestamp) > 600) {
+    // needs to be < 10 minutes
+    console.log(`Verification Failed: timestamp > 10 minutes. Message Id: ${messageId}.`);
+    throw new Error("Ignore this request.");
+  }
+
+//check if the signing secret has a value. this should equal "purplemonkeydishwasher"
+  if (!twitchSigningSecret) {
+    console.log(`Twitch signing secret is empty.`);
+    throw new Error("Twitch signing secret is empty.");
+  }
+
+  //compute hash from secret, messageId, timestamp
+  const computedSignature =
+    "sha256=" +
+    crypto
+      .createHmac("sha256", twitchSigningSecret)
+      .update(messageId + timestamp + buf)
+      .digest("hex");
+  console.log(`Message ${messageId} Computed Signature: `, computedSignature);
+
+// check if twitch signature == our server signature
+  if (messageSignature !== computedSignature) {
+    throw new Error("Invalid signature.");
+  } else {
+    console.log("Verification successful");
+  }
+};
+
+//instantiate verify signature
+app.use(express.json({ verify: verifyTwitchSignature }));
+
+//post response from twitch to /webhooks/callback
+app.post("/webhooks/callback", async (req, res) => {
+
+  //check if message is a callback verification
+  //if yes, return the requests body.challenge
+  const messageType = req.header("Twitch-Eventsub-Message-Type");
+  if (messageType === "webhook_callback_verification") {
+    console.log("Verifying Webhook");
+    return res.status(200).send(req.body.challenge);
+  }
+
+//define type and event
+  const { type } = req.body.subscription;
+  const { event } = req.body;
+
+  // import file system module and write to console the status
+  const fs = require('fs');
+  console.log("Writing to tmp file....");
+
+  //if else to determine file name and location depending on type of event
+  // NEW CODE HERE
+  fs.writeFileSync(`/tmp/jsons/c_follow_${Date.now()}.json`, JSON.stringify(event));
+
+  //print to event to console
+  console.log(
+    `A ${type} event for ${event.broadcaster_user_name}: `,
+    event
+  );
+
+  //respond to twitch with status 200
+  res.status(200).end();
+});
